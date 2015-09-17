@@ -37,6 +37,11 @@ set (mraa_LIB_ARM_SRCS_NOAUTO
 
 set (mraa_LIBS ${CMAKE_THREAD_LIBS_INIT})
 
+if (IIO_FOUND)
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DIIO=1")
+  set (mraa_LIBS "${mraa_LIBS} -l${IIO_LIBRARIES}")
+endif ()
+
 if (X86PLAT)
   add_subdirectory(x86)
   set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DX86PLAT=1")

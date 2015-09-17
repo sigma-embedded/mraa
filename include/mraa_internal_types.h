@@ -30,6 +30,10 @@
 #include "mraa_func.h"
 #include "mraa_adv_func.h"
 
+#ifdef IIO
+#include "iio.h"
+#endif
+
 // general status failures for internal functions
 #define MRAA_PLATFORM_NO_INIT -3
 #define MRAA_IO_SETUP_FAILURE -2
@@ -102,6 +106,10 @@ struct _pwm {
 struct _aio {
     /*@{*/
     unsigned int channel; /**< the channel as on board and ADC module */
+#ifdef IIO
+    struct iio_channel* chan;
+    struct iio_buffer* data;
+#endif
     int adc_in_fp; /**< File Pointer to raw sysfs */
     int value_bit; /**< 10 bits by default. Can be increased if board */
     mraa_adv_func_t* advance_func; /**< override function table */
@@ -239,7 +247,11 @@ typedef struct _board_t {
     /*@{*/
     unsigned int phy_pin_count; /**< The Total IO pins on board */
     unsigned int gpio_count; /**< GPIO Count */
-    unsigned int aio_count;  /**< Analog side Count */
+    unsigned int aio_count;  /**< Analog channel Count */
+#ifdef IIO
+    struct iio_context* iio_ctx; /**< IIO context */
+    struct iio_device *aio_device; /**< IIO device for ADC */
+#endif
     unsigned int i2c_bus_count; /**< Usable i2c Count */
     mraa_i2c_bus_t  i2c_bus[12]; /**< Array of i2c */
     unsigned int def_i2c_bus; /**< Position in array of default i2c bus */

@@ -49,6 +49,9 @@ set (CMAKE_SWIG_FLAGS "")
 find_path (SYSTEM_USR_DIR "stdlib.h")
 include_directories (${SYSTEM_USR_DIR})
 
+include(FindPkgConfig REQUIRED)
+pkg_check_modules (IIO libiio)
+
 option (BUILDDOC "Build all doc." OFF)
 option (BUILDSWIG "Build swig modules." ON)
 option (BUILDSWIGPYTHON "Build swig python modules." ON)

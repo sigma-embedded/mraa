@@ -26,6 +26,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <sys/mman.h>
+#include <assert.h>
 
 #include "common.h"
 #include "x86/intel_galileo_rev_g.h"
@@ -727,6 +728,13 @@ mraa_intel_galileo_gen2()
     b->pins[19].gpio.mux[0].value = 1;
     b->pins[19].gpio.mux[1].pin = 79;
     b->pins[19].gpio.mux[1].value = 1;
+
+#ifdef IIO
+    b->iio_ctx = iio_create_default_context();
+    assert(iio_context_get_devices_count(b->iio_ctx) > 0 && "No devices");
+    b->aio_device = iio_context_find_device(b->iio_ctx, "adc1x8s102");
+    assert(b->aio_device && "No adc1x8s102 found");
+#endif
 
     // BUS DEFINITIONS
     b->i2c_bus_count = 1;

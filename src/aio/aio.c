@@ -116,6 +116,12 @@ mraa_aio_init(unsigned int aio)
         }
     }
 
+#ifdef IIO
+    dev->chan = iio_device_get_channel(plat->aio_device, aio);
+    dev->data = iio_device_create_buffer(plat->aio_device, 1, false);
+    iio_channel_enable(dev->chan);
+    raw_bits = 16; 
+#else
     // Open valid  analog input file and get the pointer.
     if (MRAA_SUCCESS != aio_get_valid_fp(dev)) {
         free(dev);
@@ -123,6 +129,7 @@ mraa_aio_init(unsigned int aio)
     }
     raw_bits = mraa_adc_raw_bits();
 
+#endif
     if (IS_FUNC_DEFINED(dev, aio_init_post)) {
         mraa_result_t ret = dev->advance_func->aio_init_post(dev);
         if (ret != MRAA_SUCCESS) {
@@ -137,6 +144,11 @@ mraa_aio_init(unsigned int aio)
 unsigned int
 mraa_aio_read(mraa_aio_context dev)
 {
+unsigned int analog_value;   
+#ifdef IIO
+    iio_channel_read_raw(dev->chan, dev->data, NULL, 1);
+    analog_value = (unsigned int) iio_buffer_first(dev->data, dev->chan);
+#else
     char buffer[17];
     unsigned int shifter_value = 0;
 
@@ -157,7 +169,7 @@ mraa_aio_read(mraa_aio_context dev)
 
     errno = 0;
     char* end;
-    unsigned int analog_value = (unsigned int) strtoul(buffer, &end, 10);
+    analog_value = (unsigned int) strtoul(buffer, &end, 10);
     if (end == &buffer[0]) {
         syslog(LOG_ERR, "aio: Value is not a decimal number");
     } else if (errno != 0) {
@@ -175,6 +187,7 @@ mraa_aio_read(mraa_aio_context dev)
         }
     }
 
+#endif
     return analog_value;
 }
 
@@ -196,8 +209,13 @@ mraa_result_t
 mraa_aio_close(mraa_aio_context dev)
 {
     if (NULL != dev) {
+#ifdef IIO
+        iio_buffer_destroy(dev->data);
+//        iio_channel_destroy(dev->chan);
+#else
         if (dev->adc_in_fp != -1)
             close(dev->adc_in_fp);
+#endif
         free(dev);
     }
 
