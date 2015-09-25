@@ -118,8 +118,18 @@ mraa_aio_init(unsigned int aio)
 
 #ifdef IIO
     dev->chan = iio_device_get_channel(plat->aio_device, aio);
-    dev->data = iio_device_create_buffer(plat->aio_device, 1, false);
+    if (!dev->chan) {
+        syslog(LOG_ERR, "aio: Failed to get IIO channel");
+        free(dev);
+        return NULL;
+    }
     iio_channel_enable(dev->chan);
+    dev->data = iio_device_create_buffer(plat->aio_device, 1, false);
+    if (!dev->data) {
+        syslog(LOG_ERR, "aio: Failed to create IIO buffer");
+        free(dev);
+        return NULL;
+    }
     raw_bits = 16; 
 #else
     // Open valid  analog input file and get the pointer.
