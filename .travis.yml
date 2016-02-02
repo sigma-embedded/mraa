@@ -1,7 +1,10 @@
-language: cpp
+language: node_js
 compiler:
   - gcc
   - clang-3.6
+env:
+  - CXX=g++-4.8
+  - CC=clang CXX=clang++
 install:
   - sudo add-apt-repository --yes ppa:kalakris/cmake
   - sudo add-apt-repository --yes ppa:fenics-packages/fenics-exp/swig
