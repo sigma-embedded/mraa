@@ -14,9 +14,9 @@ install:
 before_script:
   - if [ "$CC" = "gcc" ]; then export BUILDJAVA=ON; else export BUILDJAVA=OFF; fi
   - export JAVA_HOME=/usr/lib/jvm/java-8-oracle
-  - if [ "${NODE4}" ]; then nvm install 4.1; export NODE_ROOT_DIR="`pwd`/.nvm/versions/node/`nvm version`/include"; fi
+  - if [ "${NODE4}" ]; then nvm install 4.1; fi
 script:
-  - mkdir build && cd build && cmake -DBUILDSWIGJAVA=$BUILDJAVA -DNODE_ROOT_DIR:PATH=/home/travis/.nvm/v0.10.36/include .. && make && make test
+  - mkdir build && cd build && cmake -DBUILDSWIGJAVA=$BUILDJAVA -DNODE_ROOT_DIR:PATH="`pwd`/.nvm/versions/node/`nvm version`/include" .. && make && make test
 node_js:
   - "4.1"
   - "4.0"
