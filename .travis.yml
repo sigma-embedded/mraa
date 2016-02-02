@@ -2,8 +2,9 @@ language: cpp
 env:
   - CC=gcc CXX=gcc
   - CC=clang CXX=clang++
-  - CC=gcc-4.8 CXX=g++-4.8
+  - NODE4=true
 install:
+  - if [ "${NODE4}" ]; then export CC=gcc-4.8 CXX=g++-4.8; fi
   - sudo add-apt-repository --yes ppa:kalakris/cmake
   - sudo add-apt-repository --yes ppa:fenics-packages/fenics-exp/swig
   - sudo apt-get update -qq
@@ -13,7 +14,7 @@ install:
 before_script:
   - if [ "$CC" = "gcc" ]; then export BUILDJAVA=ON; else export BUILDJAVA=OFF; fi
   - export JAVA_HOME=/usr/lib/jvm/java-8-oracle
-  - if [ "$CXX" = "g++-4.8" ]; then nvm install 4.1; fi
+  - if [ "${NODE4}" ]; then nvm install 4.1; fi
 script:
   - mkdir build && cd build && cmake -DBUILDSWIGJAVA=$BUILDJAVA -DNODE_ROOT_DIR:PATH=/home/travis/.nvm/v0.10.36/include .. && make && make test
 node_js:
