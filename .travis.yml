@@ -1,7 +1,7 @@
 language: cpp
 compiler:
   - gcc
-  - clang
+  - clang-3.6
 install:
   - sudo add-apt-repository --yes ppa:kalakris/cmake
   - sudo add-apt-repository --yes ppa:fenics-packages/fenics-exp/swig
@@ -14,3 +14,17 @@ before_script:
   - export JAVA_HOME=/usr/lib/jvm/java-8-oracle
 script:
   - mkdir build && cd build && cmake -DBUILDSWIGJAVA=$BUILDJAVA -DNODE_ROOT_DIR:PATH=/home/travis/.nvm/v0.10.36/include .. && make && make test
+node_js:
+  - "4.1"
+  - "4.0"
+  - "0.12"
+  - "0.11"
+  - "0.10"
+addons:
+  apt:
+    sources:
+      - llvm-toolchain-precise-3.6
+      - ubuntu-toolchain-r-test
+    packages:
+      - clang-3.6
+      - g++-4.8
