@@ -114,8 +114,8 @@ mraa_ftdi_ft4222_init()
     dl_FT4222_I2CMaster_Write = dlsym(libft4222_lib, "FT4222_I2CMaster_Write");
     dl_FT4222_I2CMaster_Reset = dlsym(libft4222_lib, "FT4222_I2CMaster_Reset");
     dl_FT4222_I2CMaster_Read = dlsym(libft4222_lib, "FT4222_I2CMaster_Read");
-    dl_FT4222_I2CMaster_Init = dlsym(libft4222_lib, "_FT4222_I2CMaster_Init");
-    dl_FT4222_I2CMaster_GetStatus = dlsym(libft4222_lib, "FT4222_I2CMaster");
+    dl_FT4222_I2CMaster_Init = dlsym(libft4222_lib, "FT4222_I2CMaster_Init");
+    dl_FT4222_I2CMaster_GetStatus = dlsym(libft4222_lib, "FT4222_I2CMaster_GetStatus");
     dl_FT4222_GPIO_Init = dlsym(libft4222_lib, "FT4222_GPIO_Init");
     dl_FT4222_GPIO_GetTriggerStatus = dlsym(libft4222_lib, "FT4222_GPIO_GetTriggerStatus");
     dl_FT4222_GPIO_ReadTriggerQueue = dlsym(libft4222_lib, "FT4222_GPIO_ReadTriggerQueue");
