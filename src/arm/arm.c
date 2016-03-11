@@ -25,6 +25,7 @@
 
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h>
 
 #include "mraa_internal.h"
 #include "arm/raspberry_pi.h"
@@ -32,6 +33,34 @@
 #include "arm/banana.h"
 #include "arm/96boards.h"
 
+static bool dtree_contains(char const *fname, char const *glob)
+{
+	int	fd = open(fname, O_RDONLY | O_CLOEXEC);
+	char	buf[512];
+	ssize_t	l;
+	char const	*p;
+
+	if (fd < 0)
+		return false;
+
+	l = read(fd, buf, sizeof buf - 1);
+	close(fd);
+
+	if (l == sizeof buf - 1)
+		/* too much data in file */
+		return false;
+
+	/* ensure that buffer null-terminated */
+	buf[l] = '\0';
+
+	for (p = buf; p < &buf[l]; p += strlen(p) + 1) {
+		int	rc = fnmatch(glob, p, 0);
+		if (rc == 0)
+			return true;
+	}
+
+	return false;
+}
 
 mraa_platform_t
 mraa_arm_platform()
