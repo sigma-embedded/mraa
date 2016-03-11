@@ -32,6 +32,7 @@
 #include "arm/beaglebone.h"
 #include "arm/banana.h"
 #include "arm/96boards.h"
+#include "arm/phytec-mira.h"
 
 static bool dtree_contains(char const *fname, char const *glob)
 {
@@ -110,6 +111,8 @@ mraa_arm_platform()
                    platform_type = MRAA_96BOARDS;
         else if (mraa_file_contains("/sys/firmware/devicetree/base/model", "HiKey Development Board"))
                    platform_type = MRAA_96BOARDS;
+        else if (dtree_contains("/sys/firmware/devicetree/base/compatible", "fsl,imx6*"))
+		platform_type = MRAA_PHYTEC_MIRA;
      }
 
     switch (platform_type) {
@@ -124,6 +127,9 @@ mraa_arm_platform()
             break;
         case MRAA_96BOARDS:
             plat = mraa_96boards();
+            break;
+        case MRAA_PHYTEC_MIRA:
+            plat = mraa_phytec_mira();
             break;
         default:
             plat = NULL;

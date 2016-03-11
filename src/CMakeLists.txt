@@ -68,6 +68,7 @@ set (mraa_LIB_ARM_SRCS_NOAUTO
   ${PROJECT_SOURCE_DIR}/src/arm/raspberry_pi.c
   ${PROJECT_SOURCE_DIR}/src/arm/beaglebone.c
   ${PROJECT_SOURCE_DIR}/src/arm/banana.c
+  ${PROJECT_SOURCE_DIR}/src/arm/phytec-mira.c
 )
 
 set (mraa_LIBS ${CMAKE_THREAD_LIBS_INIT})
